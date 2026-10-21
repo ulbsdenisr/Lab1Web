@@ -1,9 +1,3 @@
-// Put your CarsXE API key here.
-// 1) Sign in to the CarsXE dashboard
-// 2) Copy your API key
-// 3) Replace the placeholder below
-const API_KEY = 'gennqjcyf_g12od2e1j_ua3ie26nd';
-
 const form = document.getElementById('vin-form');
 const vinInput = document.getElementById('vin');
 const statusEl = document.getElementById('status');
@@ -32,13 +26,12 @@ function normalizeVin(value) {
 }
 
 async function decodeVin(vin) {
-  const url = `https://api.carsxe.com/specs?key=${encodeURIComponent(API_KEY)}&vin=${encodeURIComponent(vin)}`;
-
+  const url = `/api/decode?vin=${encodeURIComponent(vin)}`;
   const response = await fetch(url);
   const data = await response.json();
 
   if (!response.ok || data?.error || !data?.attributes) {
-    throw new Error(data?.message || 'VIN not found or API request failed.');
+    throw new Error(data?.error || data?.message || 'VIN not found or API request failed.');
   }
 
   return data.attributes;
@@ -51,12 +44,6 @@ form.addEventListener('submit', async (event) => {
 
   if (vin.length !== 17) {
     setStatus('Please enter a valid 17-character VIN.', 'error');
-    resultEl.classList.add('hidden');
-    return;
-  }
-
-  if (!API_KEY || API_KEY.trim() === '' || API_KEY === 'gennqjcyf_g12od2e1j_ua3ie26nd') {
-    setStatus('Add your CarsXE API key in js/script.js before decoding.', 'error');
     resultEl.classList.add('hidden');
     return;
   }
