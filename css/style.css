@@ -1,0 +1,285 @@
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --primary: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --success: #166534;
+  --success-soft: #dcfce7;
+  --danger: #991b1b;
+  --danger-soft: #fee2e2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.topnav {
+  width: min(100%, 520px);
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.topnav a {
+  text-decoration: none;
+  color: var(--primary);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+.topnav a.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.app {
+  width: min(100%, 520px);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0 0 18px;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  padding: 14px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button:hover {
+  opacity: 0.96;
+}
+
+.status {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.status.success {
+  color: var(--success);
+  background: var(--success-soft);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.about-page {
+  width: min(100%, 700px);
+}
+
+.about-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
+}
+
+.about-card h1 {
+  margin-bottom: 12px;
+}
+
+.about-card p {
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.about-card ul {
+  margin: 16px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.checklist {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+}
+
+.checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--success);
+  font-weight: 700;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.stat-box {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.stat-box strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.stat-box span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.item {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 12px;
+  background: #fafafa;
+}
+
+.item span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.item strong {
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 16px;
+  }
+
+  .topnav {
+    width: 100%;
+  }
+
+  .card,
+  .about-card {
+    padding: 18px;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .grid,
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .app,
+  .topnav {
+    width: min(100%, 620px);
+  }
+}
