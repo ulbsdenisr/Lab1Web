@@ -2,6 +2,8 @@ const form = document.getElementById('vin-form');
 const vinInput = document.getElementById('vin');
 const statusEl = document.getElementById('status');
 const resultEl = document.getElementById('result');
+const resetButton = document.getElementById('reset-form');
+const summaryLabel = document.getElementById('summary-label');
 
 const fields = {
   year: document.getElementById('year'),
@@ -23,6 +25,32 @@ function setStatus(message, type = '') {
 
 function normalizeVin(value) {
   return value.replace(/[^A-HJ-NPR-Z0-9]/gi, '').toUpperCase();
+}
+
+function updateSummaryLabel() {
+  const make = fields.make.textContent.trim();
+  const model = fields.model.textContent.trim();
+  const year = fields.year.textContent.trim();
+
+  if (make !== '—' && model !== '—' && year !== '—') {
+    summaryLabel.textContent = `${year} ${make} ${model}`;
+    return;
+  }
+
+  summaryLabel.textContent = 'Vehicle profile';
+}
+
+function resetFormState() {
+  form.reset();
+  vinInput.value = '';
+  resultEl.classList.add('hidden');
+  setStatus('Enter a 17-character VIN to begin.');
+
+  Object.values(fields).forEach((field) => {
+    field.textContent = '—';
+  });
+
+  updateSummaryLabel();
 }
 
 async function decodeVin(vin) {
@@ -61,6 +89,7 @@ form.addEventListener('submit', async (event) => {
     fields.engine.textContent = vehicle.engine || '—';
     fields.drivetrain.textContent = vehicle.drivetrain || '—';
 
+    updateSummaryLabel();
     resultEl.classList.remove('hidden');
     setStatus('VIN decoded successfully.', 'success');
   } catch (error) {
@@ -71,3 +100,7 @@ form.addEventListener('submit', async (event) => {
 vinInput.addEventListener('input', () => {
   vinInput.value = normalizeVin(vinInput.value);
 });
+
+resetButton.addEventListener('click', resetFormState);
+
+updateSummaryLabel();

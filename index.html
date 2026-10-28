@@ -15,27 +15,94 @@
     </nav>
 
     <main class="app">
-      <section class="card">
-        <p class="eyebrow">Vehicle lookup</p>
-        <h1>VIN Decoder</h1>
+      <section class="card advanced-card">
+        <div class="header-row">
+          <div>
+            <p class="eyebrow">Vehicle intelligence</p>
+            <h1>Advanced VIN lookup</h1>
+          </div>
+          <span class="badge">Live decode</span>
+        </div>
 
-        <form id="vin-form">
-          <label for="vin">VIN</label>
-          <div class="input-row">
-            <input
-              id="vin"
-              type="text"
-              maxlength="17"
-              placeholder="1HGCM82633A004352"
-              autocomplete="off"
-            />
-            <button type="submit">Decode</button>
+        <form id="vin-form" class="advanced-form">
+          <div class="field-group">
+            <label for="vin">VIN</label>
+            <div class="input-row">
+              <input
+                id="vin"
+                type="text"
+                maxlength="17"
+                placeholder="1HGCM82633A004352"
+                autocomplete="off"
+              />
+              <button type="submit" class="primary">Decode</button>
+            </div>
+          </div>
+
+          <div class="meta-grid">
+            <div class="field-group">
+              <label for="inspection-type">Inspection type</label>
+              <select id="inspection-type">
+                <option value="Pre-purchase review">Pre-purchase review</option>
+                <option value="Service inspection">Service inspection</option>
+                <option value="Insurance check">Insurance check</option>
+                <option value="Fleet audit">Fleet audit</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="body-style">Body style</label>
+              <select id="body-style">
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Truck">Truck</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Hatchback">Hatchback</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="vehicle-class">Vehicle class</label>
+              <select id="vehicle-class">
+                <option value="Passenger car">Passenger car</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Utility">Utility</option>
+                <option value="Commercial">Commercial</option>
+                <option value="EV">EV</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="fuel-type">Fuel / power</label>
+              <select id="fuel-type">
+                <option value="Gasoline">Gasoline</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Electric">Electric</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <label class="check"><input type="checkbox" checked /> Pre-purchase review</label>
+            <label class="check"><input type="checkbox" checked /> Maintenance check</label>
+            <label class="check"><input type="checkbox" /> Ownership history</label>
+          </div>
+
+          <div class="cta-row">
+            <button type="button" class="secondary" id="reset-form">Reset</button>
           </div>
         </form>
 
-        <p id="status" class="status">Enter a 17-character VIN.</p>
+        <p id="status" class="status">Enter a 17-character VIN to begin.</p>
 
         <div id="result" class="result hidden">
+          <div class="summary">
+            <span>Decode summary</span>
+            <strong id="summary-label">Vehicle profile</strong>
+          </div>
+
           <div class="grid">
             <div class="item">
               <span>Year</span>
