@@ -2,6 +2,44 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+function loadLocalEnv() {
+  const envPath = path.join(__dirname, '.env');
+
+  if (!fs.existsSync(envPath)) {
+    return;
+  }
+
+  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+  lines.forEach((line, index) => {
+    const trimmedLine = line.trim();
+    if (!trimmedLine || trimmedLine.startsWith('#')) {
+      return;
+    }
+
+    const match = trimmedLine.match(/^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+    if (!match) {
+      throw new Error(`Invalid .env entry on line ${index + 1}.`);
+    }
+
+    const [, name] = match;
+    let value = match[2].trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    } else {
+      value = value.replace(/\s+#.*$/, '').trim();
+    }
+
+    if (process.env[name] === undefined) {
+      process.env[name] = value;
+    }
+  });
+}
+
+loadLocalEnv();
+
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.CARSXE_API_KEY;
 const ROOT = __dirname;
@@ -76,7 +114,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      sendJson(res, 200, data);
+      sendJson(res, 200, { attributes: data.attributes });
     } catch (error) {
       sendJson(res, 500, {
         error: 'Unable to reach CarsXE API.',
