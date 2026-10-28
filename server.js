@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 
 function loadLocalEnv() {
   const envPath = path.join(__dirname, '.env');
@@ -64,7 +65,7 @@ function sendJson(res, statusCode, data) {
   res.end(JSON.stringify(data));
 }
 
-function serveFile(res, filePath) {
+function serveFile(req, res, filePath) {
   const safePath = path.normalize(filePath).replace(/^\/+/, '');
   const fullPath = path.join(ROOT, safePath);
 
@@ -76,10 +77,42 @@ function serveFile(res, filePath) {
     }
 
     const ext = path.extname(fullPath).toLowerCase();
-    res.writeHead(200, {
+    const compressible = ['.html', '.css', '.js', '.json', '.svg'].includes(ext);
+    const headers = {
       'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
-      'Access-Control-Allow-Origin': '*'
-    });
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': ['.css', '.js'].includes(ext)
+        ? 'public, max-age=31536000, immutable'
+        : 'no-cache'
+    };
+    if (compressible) {
+      headers.Vary = 'Accept-Encoding';
+    }
+
+    const acceptsGzip = (req.headers['accept-encoding'] || '')
+      .split(',')
+      .some((encoding) => {
+        const [name, ...parameters] = encoding.trim().split(';');
+        const quality = parameters.find((parameter) => parameter.trim().startsWith('q='));
+        return name === 'gzip' && (!quality || Number(quality.trim().slice(2)) > 0);
+      });
+
+    if (acceptsGzip && compressible) {
+      headers['Content-Encoding'] = 'gzip';
+      zlib.gzip(content, (gzipError, compressedContent) => {
+        if (gzipError) {
+          res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+          res.end('Unable to compress file');
+          return;
+        }
+
+        res.writeHead(200, headers);
+        res.end(compressedContent);
+      });
+      return;
+    }
+
+    res.writeHead(200, headers);
     res.end(content);
   });
 }
@@ -133,7 +166,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  serveFile(res, requestedPath);
+  serveFile(req, res, requestedPath);
 });
 
 server.listen(PORT, () => {
